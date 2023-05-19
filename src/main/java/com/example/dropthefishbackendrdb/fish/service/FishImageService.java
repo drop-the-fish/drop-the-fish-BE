@@ -13,8 +13,6 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,10 +62,11 @@ public class FishImageService {
             throw new InternalServerErrorException(ErrorCode.INTERNAL_SERVER_ERROR, "사진 업로드에 실패했습니다.");
         }
 
-        return getFileUrl(fileName);
+        assert fileName != null;
+        return openImageUrl(fileName);
     }
 
-    private String getFileUrl(String fileName) {
+    public String openImageUrl(String fileName) {
         // set expiration
         Date expiration = new Date();
         long expTimeMillis = expiration.getTime();
@@ -86,7 +85,7 @@ public class FishImageService {
     public Fish getAvailabeImageFish(Fish fish) {
         return Fish.of(fish.getName(), fish.getDescription(),
                 fish.getSeasonStart(), fish.getSeasonEnd(),
-                fish.getFeature(), getFileUrl(fish.getImageUrl()));
+                fish.getFeature(), openImageUrl(fish.getImageUrl()));
     }
 
     public String analyzeImage(String encodedImage) {
@@ -96,10 +95,6 @@ public class FishImageService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        //set body
-        MultiValueMap<String, Object> body  = new LinkedMultiValueMap<>();
-        body.add("image", encodedImage);
-
         Map<String, String> requestBody = new HashMap<>();
         requestBody.put("image", encodedImage);
 
@@ -107,8 +102,7 @@ public class FishImageService {
         HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(analyzeUri, requestEntity, String.class);
-        String result = StringEscapeUtils.unescapeJava(response.getBody());
 
-        return result;
+        return StringEscapeUtils.unescapeJava(response.getBody());
     }
 }

@@ -7,6 +7,7 @@ import com.example.dropthefishbackendrdb.fish.service.FishService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +26,6 @@ public class FishController {
     @GetMapping("/price")
     @ResponseStatus(value = HttpStatus.OK)
     public FishPriceResponseDto getTodayPrice() {
-        return FishPriceResponseDto.from(fishPriceService.getTodayPrice());
+        return FishPriceResponseDto.from(fishPriceService.getTodayPrice(new RestTemplate()));
     }
 }

@@ -8,6 +8,7 @@ import com.example.dropthefishbackendrdb.fish.service.FishRecommendationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class FishRecommendationController {
     @GetMapping("/price/month")
     @ResponseStatus(HttpStatus.OK)
     public List<FishPriceDto> recommendCheapMonthlyFish() {
-        List<FishPriceDto> todayPriceList = fishPriceService.getTodayPrice();
+        List<FishPriceDto> todayPriceList = fishPriceService.getTodayPrice(new RestTemplate());
 
         return fishRecommendationService.sortCheapMonthlyFish(todayPriceList);
     }
@@ -29,7 +30,7 @@ public class FishRecommendationController {
     @GetMapping("/price/year")
     @ResponseStatus(HttpStatus.OK)
     public List<FishPriceDto> recommendCheapYearlyFish() {
-        List<FishPriceDto> todayPriceList = fishPriceService.getTodayPrice();
+        List<FishPriceDto> todayPriceList = fishPriceService.getTodayPrice(new RestTemplate());
 
         return fishRecommendationService.sortCheapYearlyFish(todayPriceList);
     }
@@ -43,7 +44,7 @@ public class FishRecommendationController {
     @GetMapping("/pair")
     @ResponseStatus(HttpStatus.OK)
     public List<FishPairDto> recommendFishPairs() {
-        List<FishPriceDto> todayPriceList = fishPriceService.getTodayPrice();
+        List<FishPriceDto> todayPriceList = fishPriceService.getTodayPrice(new RestTemplate());
 
         return fishRecommendationService.recommendFishPairs(todayPriceList);
     }

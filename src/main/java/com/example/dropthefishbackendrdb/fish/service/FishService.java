@@ -10,7 +10,6 @@ import com.example.dropthefishbackendrdb.fish.repository.FishRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +21,7 @@ public class FishService {
     private final FishImageRepository fishImageRepository;
     private final FishImageService fishImageService;
 
-    public boolean isSeasonFish(Fish fish) {
-        int curMonth = Integer.parseInt(LocalDate.now().toString().split("-")[1]);
+    public boolean isSeasonFish(Fish fish, int curMonth) {
 
         int seasonStart = fish.getSeasonStart();
         int seasonEnd = fish.getSeasonEnd();
@@ -52,9 +50,10 @@ public class FishService {
     public FishDetailResponseDto findFishDetailByName(String name) {
         Fish findFish = findFishByName(name);
         List<FishImage> fishImageList = fishImageRepository.findAllByFish(findFish);
+        List<String> availableFishImageList = fishImageList.stream().map(fishImage -> fishImageService.openImageUrl(fishImage.getImageUrl())).toList();
 
         Fish availabeImageFish = fishImageService.getAvailabeImageFish(findFish);
 
-        return FishDetailResponseDto.from(availabeImageFish, fishImageList.stream().map(FishImage::getImageUrl).toList());
+        return FishDetailResponseDto.from(availabeImageFish, availableFishImageList);
     }
 }

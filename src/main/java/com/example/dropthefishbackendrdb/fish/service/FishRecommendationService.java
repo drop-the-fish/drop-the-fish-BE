@@ -10,6 +10,7 @@ import com.example.dropthefishbackendrdb.fish.repository.FishRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,7 @@ public class FishRecommendationService {
     private final FishPairRepository fishPairRepository;
 
     public List<FishPriceDto> sortCheapMonthlyFish(List<FishPriceDto> fishPriceDtoList) {
-        fishPriceDtoList.sort((a, b) -> calcMontlyPriceDiff(a) - calcMontlyPriceDiff(b));
+        fishPriceDtoList.sort((a, b) -> calcMonthlyPriceDiff(a) - calcMonthlyPriceDiff(b));
 
         return fishPriceDtoList.subList(0, 5);
     }
@@ -35,7 +36,7 @@ public class FishRecommendationService {
         return fishPriceDtoList.subList(0, 5);
     }
 
-    private int calcMontlyPriceDiff(FishPriceDto fishPriceDto) {
+    private int calcMonthlyPriceDiff(FishPriceDto fishPriceDto) {
         int monthAverage = fishPriceDto.getPriceList().get(4);
         int todayPrice = fishPriceDto.getPriceList().get(0);
 
@@ -59,7 +60,9 @@ public class FishRecommendationService {
 
     public SeasonFishListResponseDto recommendSeasonFish() {
         List<Fish> fishList = fishRepository.findAll();
-        List<Fish> seasonFishList = fishList.stream().filter(fishService::isSeasonFish).toList();
+
+        int curMonth = Integer.parseInt(LocalDate.now().toString().split("-")[1]);
+        List<Fish> seasonFishList = fishList.stream().filter(fish -> fishService.isSeasonFish(fish, curMonth)).toList();
 
         return SeasonFishListResponseDto.from(seasonFishList);
     }

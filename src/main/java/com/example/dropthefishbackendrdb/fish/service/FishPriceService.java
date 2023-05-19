@@ -18,9 +18,8 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class FishPriceService {
-    public List<FishPriceDto> getTodayPrice() {
+    public List<FishPriceDto> getTodayPrice(RestTemplate template) {
         String response;
-        RestTemplate template = new RestTemplate();
         List<FishPriceDto> fishPriceDtoList = new ArrayList<>();
         LocalDate yesterday = LocalDate.now().minusDays(1);
 
