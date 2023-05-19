@@ -28,6 +28,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework:spring-webflux'
     testImplementation 'org.springframework.graphql:spring-graphql-test'
+    testImplementation 'io.rest-assured:rest-assured:5.3.0'
 
     implementation 'org.apache.commons:commons-text:1.10.0'
     implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.2'
