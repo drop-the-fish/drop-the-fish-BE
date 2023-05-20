@@ -52,6 +52,11 @@ public class FishRecommendationE2ETest {
                 JSONArray priceList = fish.getJSONArray("priceList");
                 int priceMonthDiff = (int) priceList.get(4) - (int) priceList.get(0);
 
+
+                if ((int) priceList.get(0) == 0) {
+                    priceMonthDiff = Integer.MAX_VALUE;
+                }
+
                 assertThat(priceMonthDiff).isLessThanOrEqualTo(lastPrice);
 
                 lastPrice = priceMonthDiff;
@@ -85,6 +90,10 @@ public class FishRecommendationE2ETest {
                 JSONObject fish = jsonArray.getJSONObject(i);
                 JSONArray priceList = fish.getJSONArray("priceList");
                 int priceMonthDiff = (int) priceList.get(5) - (int) priceList.get(0);
+
+                if ((int) priceList.get(0) == 0) {
+                    priceMonthDiff = Integer.MAX_VALUE;
+                }
 
                 assertThat(priceMonthDiff).isLessThanOrEqualTo(lastPrice);
 
