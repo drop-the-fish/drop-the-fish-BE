@@ -1,0 +1,8 @@
+version: "3"
+services:
+  drop-the-fish:
+    image: hongjk7777/drop-the-fish
+    restart: always
+    container_name: drop-the-fish
+    ports:
+      - "8080:8080"
