@@ -32,6 +32,9 @@ public class FishImageService {
     @Value("${ml.analyze.fish.api}")
     private String analyzeUri;
 
+    @Value("${ml.analyze.sushi.api}")
+    private String sushiAnalyzeUri;
+
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
@@ -102,6 +105,24 @@ public class FishImageService {
         HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
 
         ResponseEntity<String> response = restTemplate.postForEntity(analyzeUri, requestEntity, String.class);
+
+        return StringEscapeUtils.unescapeJava(response.getBody());
+    }
+
+    public String anlayzeSushiImage(String encodedImage) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        //set header
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("image", encodedImage);
+
+        //create request
+        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(sushiAnalyzeUri, requestEntity, String.class);
 
         return StringEscapeUtils.unescapeJava(response.getBody());
     }

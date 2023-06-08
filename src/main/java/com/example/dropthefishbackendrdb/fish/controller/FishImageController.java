@@ -6,10 +6,6 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Date;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/fish")
@@ -32,5 +28,12 @@ public class FishImageController {
     public String analyzeImage(@RequestParam("file") MultipartFile fishImage) {
         String encodedImage = fishImageService.encodeImage(fishImage);
         return fishImageService.analyzeImage(encodedImage);
+    }
+
+    @PostMapping("/analyze/sushi")
+    @ResponseStatus(value = HttpStatus.OK)
+    public String analyzeSushiImage(@RequestParam("file") MultipartFile fishImage) {
+        String encodedImage = fishImageService.encodeImage(fishImage);
+        return fishImageService.anlayzeSushiImage(encodedImage);
     }
 }
